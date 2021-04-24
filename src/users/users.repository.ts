@@ -17,13 +17,13 @@ export class UserRepository extends Repository<User> {
 
     user.email = email;
     user.name = name;
-    user.salt = await bcrypt.genSalt();
-    user.password = await this.hashPassword(password, user.salt);
+    user.salt = await bcrypt.genSalt();//gera salt no momento da criação do usuario
+    user.password = await this.hashPassword(password, user.salt);//gera uma hash com o password e o salto gerado
 
     try {
       await user.save();
-      delete user.password;
-      delete user.salt;
+      delete user.password;// deleta senha do banco 
+      delete user.salt;// deleta salt do banco
       return user;
     } catch (error) {
       if (error.code.toString() === '23505') { // erro do PostgreSQL retornado em caso de unique_violation
