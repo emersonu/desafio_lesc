@@ -8,5 +8,5 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   password: 'postgres',
   database: 'desafio_lesc_teste',
   entities: [__dirname + '/../**/*.entity.{js,ts}'],
-  synchronize: false
+  synchronize: true
 };
