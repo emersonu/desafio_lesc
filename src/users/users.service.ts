@@ -1,6 +1,7 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './user.entity';
 import { UserRepository } from './users.repository';
 
@@ -17,5 +18,21 @@ export class UsersService {
     } else {
       return this.userRepository.createUser(createUserDto);
     }
+  }
+
+  async findUserById(userId: number): Promise<User> {
+    const user = await this.userRepository.findOne(userId, { select: ['email', 'name', 'id'] });
+
+    if (!user) throw new NotFoundException('Usuário não encontrado!');
+
+    return user;
+  }
+
+  async updateUser(updateUserDto: UpdateUserDto, id: number): Promise<User> {
+    return this.userRepository.updateUser(updateUserDto, id);
+  }
+
+  async deleteUser(id: number) {
+    await this.userRepository.deleteUser(id);
   }
 }

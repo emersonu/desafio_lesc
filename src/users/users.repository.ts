@@ -5,8 +5,10 @@ import * as bcrypt from 'bcrypt';
 import {
   ConflictException,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { CredentialsDto } from './dto/credentials.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 
 @EntityRepository(User)
@@ -34,6 +36,31 @@ export class UserRepository extends Repository<User> {
           'Erro ao salvar o usuário',
         );
       }
+    }
+  }
+
+  async updateUser(updateUserDto: UpdateUserDto, id: number): Promise<User> {
+    const { name, email } = updateUserDto;
+    const user = await this.findOne(id, { select: ['email', 'name', 'id'] });
+
+    if (!user) throw new NotFoundException('Usuário não encontrado!');
+
+    user.email = email ? email : user.email;
+    user.name = name ? name : user.name;
+
+    try {
+      await user.save();
+      return user;
+    } catch (error) {
+      throw new InternalServerErrorException('Erro ao atualizar usuário!');
+    };
+  }
+
+  async deleteUser(id: number) {
+    const result = await this.delete(id);
+
+    if (result.affected === 0) {
+      throw new NotFoundException('Usuário não encontrado!');
     }
   }
 
