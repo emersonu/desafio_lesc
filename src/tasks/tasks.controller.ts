@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UnauthorizedException, UseGuards, ValidationPipe } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/authentication/get-user.decorator';
-import { GetUserTasksDto } from 'src/users/dto/get-user-tasks.dto';
+import { GetUserTasksDto } from './dto/get-user-tasks.dto';
 import { User } from 'src/users/user.entity';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { ReturnTaskDto } from './dto/return-task.dto';

@@ -1,8 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { GetUserTasksDto } from 'src/users/dto/get-user-tasks.dto';
+import { GetUserTasksDto } from './dto/get-user-tasks.dto';
 import { User } from 'src/users/user.entity';
-import { createQueryBuilder, getRepository } from 'typeorm';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { Task } from './tasks.entity';

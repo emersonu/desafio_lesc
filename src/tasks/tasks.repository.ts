@@ -1,5 +1,5 @@
 import { InternalServerErrorException, NotFoundException } from "@nestjs/common";
-import { GetUserTasksDto } from "src/users/dto/get-user-tasks.dto";
+import { GetUserTasksDto } from './dto/get-user-tasks.dto';
 import { User } from "src/users/user.entity";
 import { EntityRepository, Repository } from "typeorm";
 import { CreateTaskDto } from "./dto/create-task.dto";

@@ -21,6 +21,12 @@ export class UsersController {
     }
   }
 
+  // @Get('/tasks')
+  // @UseGuards(AuthGuard())
+  // async getUserTasks(@Query(ValidationPipe) getUserTasksDto: GetUserTasksDto, @GetUser() user: User) {
+  //   return await this.userService.getUserTasks(getUserTasksDto, user);
+  // }
+
   @Get(':id')
   async findUserById(@Param('id') id: number): Promise<ReturnUserDto> {
     const user = await this.userService.findUserById(id);
@@ -29,12 +35,6 @@ export class UsersController {
       message: 'Usuário encontrado!'
     };
   }
-
-  // @Get('/tasks')
-  // @UseGuards(AuthGuard())
-  // async getUserTasks(@Query(ValidationPipe) getUserTasksDto: GetUserTasksDto, @GetUser() user: User) {
-  //   return await this.userService.getUserTasks(getUserTasksDto, user);
-  // }
 
   @Put(':id')
   @UseGuards(AuthGuard())
