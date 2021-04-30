@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { GetUserTasksDto } from 'src/users/dto/get-user-tasks.dto';
 import { User } from 'src/users/user.entity';
 import { createQueryBuilder, getRepository } from 'typeorm';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -26,6 +27,10 @@ export class TasksService {
     if (!task) throw new NotFoundException('Atividade não encontrada!');
 
     return task;
+  }
+
+  async getUserTasks(getUserTasksDto: GetUserTasksDto, user: User): Promise<{ tasks: Task[] }> {
+    return await this.taskRepository.getUserTasks(getUserTasksDto, user);
   }
 
   async updateTask(updateTaskDto: UpdateTaskDto, id: number): Promise<Task> {

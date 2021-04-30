@@ -1,4 +1,5 @@
 import { InternalServerErrorException, NotFoundException } from "@nestjs/common";
+import { GetUserTasksDto } from "src/users/dto/get-user-tasks.dto";
 import { User } from "src/users/user.entity";
 import { EntityRepository, Repository } from "typeorm";
 import { CreateTaskDto } from "./dto/create-task.dto";
@@ -24,6 +25,20 @@ export class TaskRepository extends Repository<Task> {
     } catch (error) {
       throw new InternalServerErrorException('Erro ao salvar atividade!');
     }
+  }
+
+  async getUserTasks(getUserTasksDto: GetUserTasksDto, user: User): Promise<{ tasks: Task[] }> {
+    const start_date = getUserTasksDto.start_date ? getUserTasksDto.start_date : new Date();
+    const end_date = getUserTasksDto.end_date ? getUserTasksDto.end_date : new Date();
+
+    if (!user) throw new NotFoundException('Usuário não encontrado!');
+
+    let query = this.createQueryBuilder('task').where(`task.userId =${user.id}`);
+
+    if (start_date && end_date) {
+      query = query.andWhere(`task.createdAt BETWEEN '${start_date}' AND '${end_date}'`);
+    }
+    return { tasks: await query.getMany() };
   }
 
   async updateTask(updateTaskDto: UpdateTaskDto, id: number): Promise<Task> {

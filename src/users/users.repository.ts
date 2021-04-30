@@ -80,7 +80,7 @@ export class UserRepository extends Repository<User> {
 
     if (!user) throw new NotFoundException('Usuário não encontrado!');
 
-    let query = this.taskRepository.createQueryBuilder('tasks')
+    let query = this.taskRepository.createQueryBuilder('task').where(`task.userId =${user.id}`);
 
     if (start_date && end_date) {
       query = query.andWhere(`task.createdAt BETWEEN '${start_date}' AND '${end_date}'`);
