@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, ForbiddenException, Get, Param, Post, Put, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, ForbiddenException, Get, Param, Post, Put, Query, UseGuards, ValidationPipe } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/authentication/get-user.decorator';
 import { CreateUserDto } from './dto/create-user.dto';
+import { GetUserTasksDto } from './dto/get-user-tasks.dto';
 import { ReturnUserDto } from './dto/return-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './user.entity';
@@ -28,6 +29,12 @@ export class UsersController {
       message: 'Usuário encontrado!'
     };
   }
+
+  // @Get('/tasks')
+  // @UseGuards(AuthGuard())
+  // async getUserTasks(@Query(ValidationPipe) getUserTasksDto: GetUserTasksDto, @GetUser() user: User) {
+  //   return await this.userService.getUserTasks(getUserTasksDto, user);
+  // }
 
   @Put(':id')
   @UseGuards(AuthGuard())

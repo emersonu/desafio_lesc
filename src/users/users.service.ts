@@ -1,6 +1,8 @@
 import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Task } from 'src/tasks/tasks.entity';
 import { CreateUserDto } from './dto/create-user.dto';
+import { GetUserTasksDto } from './dto/get-user-tasks.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './user.entity';
 import { UserRepository } from './users.repository';
@@ -16,8 +18,12 @@ export class UsersService {
     if (createUserDto.password != createUserDto.passwordConfirmation) {
       throw new UnprocessableEntityException('As senhas não são iguais!');
     } else {
-      return this.userRepository.createUser(createUserDto);
+      return await this.userRepository.createUser(createUserDto);
     }
+  }
+
+  async getUserTasks(getUserTasksDto: GetUserTasksDto, user: User): Promise<{ tasks: Task[] }> {
+    return await this.userRepository.getUserTasks(getUserTasksDto, user);
   }
 
   async findUserById(userId: number): Promise<User> {
@@ -29,7 +35,7 @@ export class UsersService {
   }
 
   async updateUser(updateUserDto: UpdateUserDto, id: number): Promise<User> {
-    return this.userRepository.updateUser(updateUserDto, id);
+    return await this.userRepository.updateUser(updateUserDto, id);
   }
 
   async deleteUser(id: number) {

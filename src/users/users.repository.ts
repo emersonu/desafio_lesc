@@ -9,10 +9,20 @@ import {
 } from '@nestjs/common';
 import { CredentialsDto } from './dto/credentials.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { GetUserTasksDto } from './dto/get-user-tasks.dto';
+import { Task } from 'src/tasks/tasks.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { TaskRepository } from 'src/tasks/tasks.repository';
 
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
+  constructor(
+    @InjectRepository(TaskRepository)
+    private taskRepository: TaskRepository
+  ) {
+    super();
+  }
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     const { name, email, password } = createUserDto;
@@ -62,6 +72,20 @@ export class UserRepository extends Repository<User> {
     if (result.affected === 0) {
       throw new NotFoundException('Usuário não encontrado!');
     }
+  }
+
+  async getUserTasks(getUserTasksDto: GetUserTasksDto, user: User): Promise<{ tasks: Task[] }> {
+    const start_date = getUserTasksDto.start_date ? getUserTasksDto.start_date : new Date();
+    const end_date = getUserTasksDto.end_date ? getUserTasksDto.end_date : new Date();
+
+    if (!user) throw new NotFoundException('Usuário não encontrado!');
+
+    let query = this.taskRepository.createQueryBuilder('tasks')
+
+    if (start_date && end_date) {
+      query = query.andWhere(`task.createdAt BETWEEN '${start_date}' AND '${end_date}'`);
+    }
+    return { tasks: await query.getMany() };
   }
 
   async checkCredentials(credentialsDto: CredentialsDto): Promise<User> {
