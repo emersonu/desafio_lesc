@@ -1,5 +1,6 @@
-import { BaseEntity, Entity, Unique, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { BaseEntity, Entity, Unique, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { Task } from 'src/tasks/tasks.entity';
 
 @Entity()
 @Unique(['email'])
@@ -24,6 +25,9 @@ export class User extends BaseEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(() => Task, (task: Task) => task.user)
+  tasks: Task[];
 
   async checkPassword(password: string): Promise<boolean> {
     const hash = await bcrypt.hash(password, this.salt);
