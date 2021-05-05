@@ -24,7 +24,7 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+[Nest](https://github.com/nestjs/nest) Projeto de API feito em NESTjs com autenticação via JWT, crud de users e tasks.
 
 ## Installation
 
